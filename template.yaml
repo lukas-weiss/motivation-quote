@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  motivation-quote
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  MotivationQuoteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: motivation_quote/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        MotivationQuote:
+          Type: Api
+          Properties:
+            Path: /motivation-quote
+            Method: get
+
+Outputs:
+  MotivationQuoteApi:
+    Description: "API Gateway endpoint URL for Prod stage for MotivationQuote function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/motivation-quote/"
+  MotivationQuoteFunction:
+    Description: "MotivationQuote Lambda Function ARN"
+    Value: !GetAtt MotivationQuoteFunction.Arn
+  MotivationQuoteFunctionIamRole:
+    Description: "Implicit IAM Role created for MotivationQuote function"
+    Value: !GetAtt MotivationQuoteFunctionRole.Arn
